@@ -358,10 +358,10 @@ describe("<AlertGroup /> card theme", () => {
     settingsStore.alertGroupConfig.config.colorTitleBar = false;
     group.stateCount = { active: 5, suppressed: 0, unprocessed: 0 };
     const tree = MountedAlertGroup(jest.fn(), false);
-    expect(tree.find(".card").hasClass("bg-light")).toBe(true);
-    expect(tree.find(".card").hasClass("bg-danger")).toBe(false);
-    expect(tree.find(".card").hasClass("bg-success")).toBe(false);
-    expect(tree.find(".card").hasClass("bg-secondary")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-light")).toBe(true);
+    expect(tree.find("div.card").hasClass("bg-danger")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-success")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-secondary")).toBe(false);
   });
 
   it("renders themed titlebar when colorTitleBar=false", () => {
@@ -375,10 +375,10 @@ describe("<AlertGroup /> card theme", () => {
     settingsStore.alertGroupConfig.config.colorTitleBar = false;
     group.stateCount = { active: 5, suppressed: 0, unprocessed: 0 };
     const tree = MountedAlertGroup(jest.fn(), false);
-    expect(tree.find(".card").hasClass("bg-light")).toBe(true);
-    expect(tree.find(".card").hasClass("bg-danger")).toBe(false);
-    expect(tree.find(".card").hasClass("bg-success")).toBe(false);
-    expect(tree.find(".card").hasClass("bg-secondary")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-light")).toBe(true);
+    expect(tree.find("div.card").hasClass("bg-danger")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-success")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-secondary")).toBe(false);
   });
 
   it("renders themed titlebar when colorTitleBar=true and there are multiple alert states", () => {
@@ -392,10 +392,10 @@ describe("<AlertGroup /> card theme", () => {
     settingsStore.alertGroupConfig.config.colorTitleBar = true;
     group.stateCount = { active: 0, suppressed: 5, unprocessed: 0 };
     const tree = MountedAlertGroup(jest.fn(), false);
-    expect(tree.find(".card").hasClass("bg-light")).toBe(false);
-    expect(tree.find(".card").hasClass("bg-danger")).toBe(false);
-    expect(tree.find(".card").hasClass("bg-success")).toBe(true);
-    expect(tree.find(".card").hasClass("bg-secondary")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-light")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-danger")).toBe(false);
+    expect(tree.find("div.card").hasClass("bg-success")).toBe(true);
+    expect(tree.find("div.card").hasClass("bg-secondary")).toBe(false);
   });
 
   it("renders unthemed titlebar when colorTitleBar=true and there's only one alert state", () => {

@@ -3,12 +3,11 @@ import PropTypes from "prop-types";
 
 import { useObserver, useLocalStore } from "mobx-react";
 
-import { Fade } from "react-reveal";
+import { motion } from "framer-motion";
 
 import { APISilence } from "Models/API";
 import { AlertStore } from "Stores/AlertStore";
 import { SilenceFormStore, SilenceTabNames } from "Stores/SilenceFormStore";
-import { ThemeContext } from "Components/Theme";
 import { SilenceComment } from "./SilenceComment";
 import { SilenceDetails } from "./SilenceDetails";
 
@@ -48,37 +47,36 @@ const ManagedSilence = ({
     silenceFormStore.toggle.show();
   };
 
-  const context = React.useContext(ThemeContext);
-
   return useObserver(() => (
-    <Fade in={context.animations.in} duration={context.animations.duration}>
-      <div className="card my-1 components-managed-silence">
-        <div className="card-header rounded-0 border-bottom-0 px-3">
-          <SilenceComment
-            alertStore={alertStore}
+    <motion.div
+      animate={{ opacity: [0, 1] }}
+      className="card my-1 components-managed-silence"
+    >
+      <div className="card-header rounded-0 border-bottom-0 px-3">
+        <SilenceComment
+          alertStore={alertStore}
+          cluster={cluster}
+          silence={silence}
+          alertCount={alertCount}
+          alertCountAlwaysVisible={alertCountAlwaysVisible}
+          collapsed={collapse.value}
+          collapseToggle={collapse.toggle}
+        />
+      </div>
+
+      {collapse.value ? null : (
+        <div className="card-body pt-0">
+          <SilenceDetails
             cluster={cluster}
             silence={silence}
-            alertCount={alertCount}
-            alertCountAlwaysVisible={alertCountAlwaysVisible}
-            collapsed={collapse.value}
-            collapseToggle={collapse.toggle}
+            alertStore={alertStore}
+            silenceFormStore={silenceFormStore}
+            onEditSilence={onEditSilence}
+            onDeleteModalClose={onDeleteModalClose}
           />
         </div>
-
-        {collapse.value ? null : (
-          <div className="card-body pt-0">
-            <SilenceDetails
-              cluster={cluster}
-              silence={silence}
-              alertStore={alertStore}
-              silenceFormStore={silenceFormStore}
-              onEditSilence={onEditSilence}
-              onDeleteModalClose={onDeleteModalClose}
-            />
-          </div>
-        )}
-      </div>
-    </Fade>
+      )}
+    </motion.div>
   ));
 };
 ManagedSilence.propTypes = {

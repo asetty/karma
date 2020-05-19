@@ -6,7 +6,7 @@ import { observable, action, toJS } from "mobx";
 
 import hash from "object-hash";
 
-import { Fade } from "react-reveal";
+import { motion } from "framer-motion";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
@@ -237,81 +237,78 @@ const AlertGroup = observer(
           }`}
           style={{ ...style, ...extraStyle }}
         >
-          <Fade
-            in={this.context.animations.in}
-            duration={this.context.animations.duration}
-            wait={this.context.animations.duration}
-            onReveal={this.renderConfig.setAnimationDone}
+          <motion.div
+            animate={{ opacity: [0, 1] }}
+            onAnimationComplete={this.renderConfig.setAnimationDone}
+            className={`card ${cardBackgroundClass}`}
           >
-            <div className={`card ${cardBackgroundClass}`}>
-              <GroupHeader
-                collapseStore={this.collapse}
+            <GroupHeader
+              collapseStore={this.collapse}
+              group={group}
+              alertStore={alertStore}
+              silenceFormStore={silenceFormStore}
+              themedCounters={themedCounters}
+              setIsMenuOpen={this.renderConfig.setIsMenuOpen}
+              gridLabelValue={gridLabelValue}
+            />
+            {this.collapse.value ? null : (
+              <div className="card-body px-2 py-1 components-grid-alertgrid-card">
+                <ul className="list-group">
+                  {group.alerts
+                    .slice(0, this.renderConfig.alertsToRender)
+                    .map((alert) => (
+                      <Alert
+                        key={hash(alert.labels)}
+                        group={group}
+                        alert={alert}
+                        showAlertmanagers={
+                          showAlertmanagers && !showAlertmanagersInFooter
+                        }
+                        showReceiver={
+                          alertStore.data.receivers.length > 1 &&
+                          group.alerts.length === 1
+                        }
+                        afterUpdate={afterUpdate}
+                        alertStore={alertStore}
+                        silenceFormStore={silenceFormStore}
+                        setIsMenuOpen={this.renderConfig.setIsMenuOpen}
+                      />
+                    ))}
+                  {group.alerts.length > this.defaultRenderCount ? (
+                    <li className="list-group-item border-0 p-0 text-center bg-transparent">
+                      <LoadButton
+                        icon={faMinus}
+                        action={this.loadLess}
+                        tooltip="Show fewer alerts in this group"
+                      />
+                      <small className="text-muted mx-2">
+                        {Math.min(
+                          this.renderConfig.alertsToRender,
+                          group.alerts.length
+                        )}
+                        {" of "}
+                        {group.alerts.length}
+                      </small>
+                      <LoadButton
+                        icon={faPlus}
+                        action={this.loadMore}
+                        tooltip="Show more alerts in this group"
+                      />
+                    </li>
+                  ) : null}
+                </ul>
+              </div>
+            )}
+            {this.collapse.value === false && group.alerts.length > 1 ? (
+              <GroupFooter
                 group={group}
+                alertmanagers={footerAlertmanagers}
+                afterUpdate={afterUpdate}
                 alertStore={alertStore}
                 silenceFormStore={silenceFormStore}
-                themedCounters={themedCounters}
-                setIsMenuOpen={this.renderConfig.setIsMenuOpen}
-                gridLabelValue={gridLabelValue}
               />
-              {this.collapse.value ? null : (
-                <div className="card-body px-2 py-1 components-grid-alertgrid-card">
-                  <ul className="list-group">
-                    {group.alerts
-                      .slice(0, this.renderConfig.alertsToRender)
-                      .map((alert) => (
-                        <Alert
-                          key={hash(alert.labels)}
-                          group={group}
-                          alert={alert}
-                          showAlertmanagers={
-                            showAlertmanagers && !showAlertmanagersInFooter
-                          }
-                          showReceiver={
-                            alertStore.data.receivers.length > 1 &&
-                            group.alerts.length === 1
-                          }
-                          afterUpdate={afterUpdate}
-                          alertStore={alertStore}
-                          silenceFormStore={silenceFormStore}
-                          setIsMenuOpen={this.renderConfig.setIsMenuOpen}
-                        />
-                      ))}
-                    {group.alerts.length > this.defaultRenderCount ? (
-                      <li className="list-group-item border-0 p-0 text-center bg-transparent">
-                        <LoadButton
-                          icon={faMinus}
-                          action={this.loadLess}
-                          tooltip="Show fewer alerts in this group"
-                        />
-                        <small className="text-muted mx-2">
-                          {Math.min(
-                            this.renderConfig.alertsToRender,
-                            group.alerts.length
-                          )}
-                          {" of "}
-                          {group.alerts.length}
-                        </small>
-                        <LoadButton
-                          icon={faPlus}
-                          action={this.loadMore}
-                          tooltip="Show more alerts in this group"
-                        />
-                      </li>
-                    ) : null}
-                  </ul>
-                </div>
-              )}
-              {this.collapse.value === false && group.alerts.length > 1 ? (
-                <GroupFooter
-                  group={group}
-                  alertmanagers={footerAlertmanagers}
-                  afterUpdate={afterUpdate}
-                  alertStore={alertStore}
-                  silenceFormStore={silenceFormStore}
-                />
-              ) : null}
-            </div>
-          </Fade>
+            ) : null}
+          </motion.div>
         </div>
       );
     }

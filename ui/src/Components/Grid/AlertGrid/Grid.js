@@ -5,7 +5,7 @@ import { useObserver } from "mobx-react";
 
 import debounce from "lodash.debounce";
 
-import { Fade } from "react-reveal";
+import { motion } from "framer-motion";
 
 import FontFaceObserver from "fontfaceobserver";
 
@@ -17,7 +17,6 @@ import { Settings } from "Stores/Settings";
 import { SilenceFormStore } from "Stores/SilenceFormStore";
 import { APIGrid } from "Models/API";
 import { useGrid } from "Hooks/useGrid";
-import { ThemeContext } from "Components/Theme";
 import { DefaultDetailsCollapseValue } from "./AlertGroup/DetailsToggle";
 import { AlertGroup } from "./AlertGroup";
 import { Swimlane } from "./Swimlane";
@@ -93,8 +92,6 @@ const Grid = ({
     }
   }, [grid.alertGroups.length, groupsToRender]);
 
-  const context = React.useContext(ThemeContext);
-
   return useObserver(() => (
     <React.Fragment>
       {grid.labelName !== "" && (
@@ -136,25 +133,23 @@ const Grid = ({
       </div>
       {isExpanded && grid.alertGroups.length > groupsToRender && (
         <div className="d-flex flex-row justify-content-between">
-          <div className="flex-shrink-1 flex-grow-1 text-center">
-            <Fade
-              in={context.animations.in}
-              duration={context.animations.duration}
+          <motion.div
+            animate={{ opacity: [0, 1] }}
+            className="flex-shrink-1 flex-grow-1 text-center"
+          >
+            <button
+              type="button"
+              className="btn btn-secondary mb-3"
+              onClick={() =>
+                setGroupsToRender(
+                  Math.min(groupsToRender + 30, grid.alertGroups.length)
+                )
+              }
             >
-              <button
-                type="button"
-                className="btn btn-secondary mb-3"
-                onClick={() =>
-                  setGroupsToRender(
-                    Math.min(groupsToRender + 30, grid.alertGroups.length)
-                  )
-                }
-              >
-                <FontAwesomeIcon className="mr-2" icon={faAngleDoubleDown} />
-                Load more
-              </button>
-            </Fade>
-          </div>
+              <FontAwesomeIcon className="mr-2" icon={faAngleDoubleDown} />
+              Load more
+            </button>
+          </motion.div>
         </div>
       )}
     </React.Fragment>
