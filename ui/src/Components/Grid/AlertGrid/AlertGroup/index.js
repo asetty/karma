@@ -19,6 +19,7 @@ import { SilenceFormStore } from "Stores/SilenceFormStore";
 import { BackgroundClassMap } from "Common/Colors";
 import { TooltipWrapper } from "Components/TooltipWrapper";
 import { ThemeContext } from "Components/Theme";
+import { GridAnimationVarians } from "../Animation";
 import { GroupHeader } from "./GroupHeader";
 import { Alert } from "./Alert";
 import { GroupFooter } from "./GroupFooter";
@@ -229,7 +230,9 @@ const AlertGroup = observer(
       }
 
       return (
-        <div
+        <motion.div
+          variants={GridAnimationVarians}
+          onAnimationComplete={this.renderConfig.setAnimationDone}
           className={`components-grid-alertgrid-alertgroup ${
             this.renderConfig.animationDone
               ? "components-animation-fade-appear-done"
@@ -237,11 +240,7 @@ const AlertGroup = observer(
           }`}
           style={{ ...style, ...extraStyle }}
         >
-          <motion.div
-            animate={{ opacity: [0, 1] }}
-            onAnimationComplete={this.renderConfig.setAnimationDone}
-            className={`card ${cardBackgroundClass}`}
-          >
+          <div className={`card ${cardBackgroundClass}`}>
             <GroupHeader
               collapseStore={this.collapse}
               group={group}
@@ -308,8 +307,8 @@ const AlertGroup = observer(
                 silenceFormStore={silenceFormStore}
               />
             ) : null}
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       );
     }
   }

@@ -20,6 +20,7 @@ import { useGrid } from "Hooks/useGrid";
 import { DefaultDetailsCollapseValue } from "./AlertGroup/DetailsToggle";
 import { AlertGroup } from "./AlertGroup";
 import { Swimlane } from "./Swimlane";
+import { GridAnimationVarians } from "./Animation";
 
 const Grid = ({
   alertStore,
@@ -102,7 +103,7 @@ const Grid = ({
           onToggle={onCollapseClick}
         />
       )}
-      <div
+      <motion.div
         className="components-grid"
         ref={ref}
         key={settingsStore.gridConfig.config.groupWidth}
@@ -110,6 +111,9 @@ const Grid = ({
           paddingLeft: outerPadding + "px",
           paddingRight: outerPadding + "px",
         }}
+        initial="hidden"
+        animate="visible"
+        variants={GridAnimationVarians}
       >
         {isExpanded || grid.labelName === ""
           ? grid.alertGroups.slice(0, groupsToRender).map((group) => (
@@ -130,7 +134,7 @@ const Grid = ({
               />
             ))
           : []}
-      </div>
+      </motion.div>
       {isExpanded && grid.alertGroups.length > groupsToRender && (
         <div className="d-flex flex-row justify-content-between">
           <motion.div

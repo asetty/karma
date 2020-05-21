@@ -614,7 +614,7 @@ describe("<AlertGrid />", () => {
 
     tree.find("div.components-grid-alertgrid-alertgroup").forEach((node) => {
       expect(node.prop("style")).toMatchObject({
-        width: 595,
+        width: "595px",
       });
     });
   });
@@ -647,7 +647,7 @@ describe("<AlertGrid />", () => {
 
     tree.find("div.components-grid-alertgrid-alertgroup").forEach((node) => {
       expect(node.prop("style")).toMatchObject({
-        width: 600,
+        width: "600px",
       });
     });
   });
